@@ -141,6 +141,7 @@ module LibertyBuildpack::Framework
         LibertyBuildpack::Util::Cache::ApplicationCache.new.get("https://docs.google.com/a/zeroturnaround.com/uc?authuser=0&id=0ByJke-XHOT3_eksxMEpmc2dvbjA&export=download") do |xr_file|
           puts "(#{(Time.now - download_start_time).duration})"
           install_agent(file, jr_home, xr_file, xr_home)
+        end
       end
     rescue => e
       raise "Unable to download the JRebel zip. Ensure that the zip at #{@uri} is available and accessible. #{e.message}"
