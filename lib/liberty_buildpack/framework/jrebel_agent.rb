@@ -97,7 +97,8 @@ module LibertyBuildpack::Framework
 
       jr_home = File.join(app_dir, JR_HOME_DIR)
       jr_native_agent = File.join(jr_home, LIBJREBEL_SO)
-      xr_native_agent = File.join(xr_home, XREBEL_JAR)
+      xr_home = File.join(app_dir, XR_HOME_DIR)
+      xr_agent = File.join(xr_home, XREBEL_JAR)
 
       jr_log = File.join(@common_paths.log_directory, 'jrebel.log')
 
@@ -137,7 +138,7 @@ module LibertyBuildpack::Framework
       download_start_time = Time.now
       print "-----> Downloading JRebel Agent #{@version} from #{@uri} "
       LibertyBuildpack::Util::Cache::ApplicationCache.new.get(@uri) do |file|
-        print "-----> Downloading XRebel Agent from https://dl.zeroturnaround.com/?token=c1681291a35725f41d99d3e2305b8095188e55e1"
+        print "\n-----> Downloading XRebel Agent from https://dl.zeroturnaround.com/?token=c1681291a35725f41d99d3e2305b8095188e55e1"
         LibertyBuildpack::Util::Cache::ApplicationCache.new.get("https://dl.zeroturnaround.com/?token=c1681291a35725f41d99d3e2305b8095188e55e1") do |xr_file|
           puts "(#{(Time.now - download_start_time).duration})"
           install_agent(file, jr_home, xr_file, xr_home)
