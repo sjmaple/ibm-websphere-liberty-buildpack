@@ -127,10 +127,11 @@ module LibertyBuildpack::Framework
     LIBJREBEL_SO = File.join(JREBEL, 'lib', 'libjrebel64.so')
     # JRebel home directory
     XR_HOME_DIR = '.xrebel'.freeze
-    # Name of the main jar file
-    XREBEL_JAR = File.join(XREBEL, 'xrebel.jar'.freeze)
     # Directory name
     XREBEL = 'xrebel'.freeze
+    # Name of the main jar file
+    XREBEL_JAR = File.join(XREBEL, 'xrebel.jar'.freeze)
+
     #-----------------------------------------------------------------------------------------
     # Download the JRebel zip from the repository as specified in the JRebel configuration.
     #------------------------------------------------------------------------------------------
