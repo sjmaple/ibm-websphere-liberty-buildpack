@@ -137,8 +137,8 @@ module LibertyBuildpack::Framework
       download_start_time = Time.now
       print "-----> Downloading JRebel Agent #{@version} from #{@uri} "
       LibertyBuildpack::Util::Cache::ApplicationCache.new.get(@uri) do |file|
-        print "-----> Downloading XRebel Agent #{@version} from https://docs.google.com/a/zeroturnaround.com/uc?authuser=0&id=0ByJke-XHOT3_eksxMEpmc2dvbjA&export=download"
-        LibertyBuildpack::Util::Cache::ApplicationCache.new.get("https://docs.google.com/a/zeroturnaround.com/uc?authuser=0&id=0ByJke-XHOT3_eksxMEpmc2dvbjA&export=download") do |xr_file|
+        print "-----> Downloading XRebel Agent from https://dl.zeroturnaround.com/?token=c1681291a35725f41d99d3e2305b8095188e55e1"
+        LibertyBuildpack::Util::Cache::ApplicationCache.new.get("https://dl.zeroturnaround.com/?token=c1681291a35725f41d99d3e2305b8095188e55e1") do |xr_file|
           puts "(#{(Time.now - download_start_time).duration})"
           install_agent(file, jr_home, xr_file, xr_home)
         end
