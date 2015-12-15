@@ -81,7 +81,12 @@ module LibertyBuildpack::Framework
       jr_home = File.join(@app_dir, JR_HOME_DIR)
       FileUtils.mkdir_p(jr_home)
       FileUtils.rm_r(File.join(jr_home, JREBEL)) if Dir.exist?(File.join(jr_home, JREBEL))
-      download_and_install_agent(jr_home)
+
+      xr_home = File.join(@app_dir, XR_HOME_DIR)
+      FileUtils.mkdir_p(xr_home)
+      FileUtils.rm_r(File.join(xr_home, XREBEL)) if Dir.exist?(File.join(xr_home, XREBEL))
+
+      download_and_install_agent(jr_home, xr_home)
     end
 
     #-----------------------------------------------------------------------------------------
@@ -92,10 +97,12 @@ module LibertyBuildpack::Framework
 
       jr_home = File.join(app_dir, JR_HOME_DIR)
       jr_native_agent = File.join(jr_home, LIBJREBEL_SO)
+      xr_native_agent = File.join(xr_home, XREBEL_JAR)
 
       jr_log = File.join(@common_paths.log_directory, 'jrebel.log')
 
       @java_opts << "-agentpath:#{jr_native_agent}"
+      @java_opts << "-javaagent:#{xr_agent}"
       @java_opts << '-Drebel.remoting_plugin=true'
       @java_opts << '-Drebel.log=true'
       @java_opts << "-Drebel.log.file=#{jr_log}"
@@ -117,25 +124,33 @@ module LibertyBuildpack::Framework
     JREBEL = 'jrebel'.freeze
     # Path tho the native agent within the nosetup.zip
     LIBJREBEL_SO = File.join(JREBEL, 'lib', 'libjrebel64.so')
-
+    # JRebel home directory
+    XR_HOME_DIR = '.xrebel'.freeze
+    # Name of the main jar file
+    XREBEL_JAR = 'xrebel.jar'.freeze
+    # Directory name
+    XREBEL = 'xrebel'.freeze
     #-----------------------------------------------------------------------------------------
     # Download the JRebel zip from the repository as specified in the JRebel configuration.
     #------------------------------------------------------------------------------------------
-    def download_and_install_agent(jr_home)
+    def download_and_install_agent(jr_home, xr_home)
       download_start_time = Time.now
       print "-----> Downloading JRebel Agent #{@version} from #{@uri} "
       LibertyBuildpack::Util::Cache::ApplicationCache.new.get(@uri) do |file|
-        puts "(#{(Time.now - download_start_time).duration})"
-        install_agent(file, jr_home)
+        print "-----> Downloading XRebel Agent #{@version} from https://docs.google.com/a/zeroturnaround.com/uc?authuser=0&id=0ByJke-XHOT3_eksxMEpmc2dvbjA&export=download"
+        LibertyBuildpack::Util::Cache::ApplicationCache.new.get("https://docs.google.com/a/zeroturnaround.com/uc?authuser=0&id=0ByJke-XHOT3_eksxMEpmc2dvbjA&export=download") do |xr_file|
+          puts "(#{(Time.now - download_start_time).duration})"
+          install_agent(file, jr_home, xr_file, xr_home)
       end
     rescue => e
       raise "Unable to download the JRebel zip. Ensure that the zip at #{@uri} is available and accessible. #{e.message}"
     end
 
-    def install_agent(file, jr_home)
+    def install_agent(file, jr_home, xr_file, xr_home)
       print '         Installing archive ... '
       install_start_time = Time.now
       LibertyBuildpack::Container::ContainerUtils.unzip(file, jr_home)
+      LibertyBuildpack::Container::ContainerUtils.unzip(xr_file, xr_home)
       puts "(#{(Time.now - install_start_time).duration})\n"
     end
 
