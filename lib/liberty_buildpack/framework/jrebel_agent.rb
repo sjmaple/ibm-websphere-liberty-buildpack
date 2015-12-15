@@ -128,7 +128,7 @@ module LibertyBuildpack::Framework
     # JRebel home directory
     XR_HOME_DIR = '.xrebel'.freeze
     # Name of the main jar file
-    XREBEL_JAR = 'xrebel.jar'.freeze
+    XREBEL_JAR = File.join(XREBEL, 'xrebel.jar'.freeze)
     # Directory name
     XREBEL = 'xrebel'.freeze
     #-----------------------------------------------------------------------------------------
