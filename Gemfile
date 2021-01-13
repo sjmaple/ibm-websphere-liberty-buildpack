@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 group :development do
   gem 'rake'
-  gem 'redcarpet'
+  gem 'redcarpet', '>= 3.5.1'
   gem 'rainbow', '~> 1.1'
   gem 'rubocop', '~> 0.11.1'
   gem 'yard'
